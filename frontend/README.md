@@ -39,7 +39,18 @@ The backend lives in `../backend`. Full details are in [`backend/README.md`](../
    You should see `CivicEvents+ backend listening on port 4000` and `Connected to PostgreSQL`.
    Check it at http://localhost:4000/health.
 
-6. **Create an admin account.** There is no seed file, and the website's sign-up form only creates normal users, so create the admin with Postman or Thunder Client:
+6. **Seed demo data** (an admin, a demo user, sample events and notifications). Run the seed file the same way as the migration:
+   ```sql
+   \i 'path/to/backend/migrations/002_seed_data.sql'
+   ```
+   On macOS or Linux, `npm run db:seed` also works. The seed is safe to run more than once.
+
+   | Account | Email | Password |
+   |---|---|---|
+   | Admin | `admin@civic.com` | `Admin@1234` |
+   | Normal user | `user@civic.com` | `User@1234` |
+
+   Without the seed, you can create an admin with Postman or Thunder Client instead. The website's sign-up form only creates normal users.
    ```
    POST http://localhost:4000/api/auth/signup
    Content-Type: application/json
@@ -67,7 +78,8 @@ The backend has CORS enabled, so the frontend can run on any port.
 
 ```
 frontend/
-  index.html                 entry: redirects to login / events / dashboard
+  index.html                 entry: redirects to login or the right dashboard
+  dashboard.html             normal user's dashboard (GET /api/dashboard/me)
   login.html  signup.html    auth pages (strength meter, validation)
   events.html  event.html  event-form.html  my-registrations.html
   announcements.html  announcement.html  announcement-form.html
@@ -96,7 +108,11 @@ frontend/
   - **"Keep me signed in" unticked → `sessionStorage`.** This is the default and the safer option, because the data is cleared when the tab closes.
   - **Ticked → `localStorage`.** It persists across restarts. The trade-off is that any script running on the page can read it, which makes it more exposed to XSS. All API text is escaped (`UI.esc`) before being inserted into the page to reduce that risk.
 - **Every protected request** sends `Authorization: Bearer <token>` (`js/api.js`).
-- **Expired tokens:** the JWT `exp` is checked on every page load (`Auth.isExpired`). Any `401` from the API signs the user out and shows "Your session has expired".
+- **Expired tokens:**
+  - The JWT `exp` is checked on every page load (`Auth.isExpired`).
+  - A timer warns the user one minute before expiry and signs them out at the expiry time (`Layout.watchExpiry`).
+  - Any `401` from the API also signs the user out and shows "Your session has expired".
+- **After login**, admins land on the admin dashboard and normal users on their own dashboard.
 - **`403` errors** show "You do not have permission… contact an administrator".
 
 ## 5. Role-based access guards (where to find them)

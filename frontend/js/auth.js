@@ -101,5 +101,14 @@ const Auth = {
     $root.find('[data-user-only]').toggleClass('hidden', admin);
   },
 
-  homePage() { return Auth.isAdmin() ? 'admin-dashboard.html' : 'events.html'; },
+  /** "Dashboard" after login: admins get the admin dashboard, normal users their own dashboard */
+  homePage() { return Auth.isAdmin() ? 'admin-dashboard.html' : 'dashboard.html'; },
+
+  /** Milliseconds until the token expires (null if unknown) */
+  msUntilExpiry() {
+    try {
+      const p = JSON.parse(atob(Auth.getToken().split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return p.exp * 1000 - Date.now();
+    } catch { return null; }
+  },
 };

@@ -45,6 +45,15 @@ const Layout = {
     Auth.applyRoleVisibility();
     UI.showFlash();
     Layout.loadNotifications();
+    Layout.watchExpiry();
+  },
+
+  /** Sign the user out the moment the token expires (not only on the next API call) */
+  watchExpiry() {
+    const ms = Auth.msUntilExpiry();
+    if (ms === null) return;
+    if (ms > 60000) setTimeout(() => UI.toast('Your session will expire in 1 minute. Save your work.', 'info'), ms - 60000);
+    setTimeout(() => Auth.logout('Your session has expired. Please log in again.'), Math.max(0, ms));
   },
 
   navLink(href, label, page, current, extra = '') {
@@ -101,6 +110,7 @@ const Layout = {
               <p class="truncate text-sm text-slate-600">${UI.esc(user.email || '')}</p>
               <span class="mt-1 inline-block rounded-full ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'} px-2 py-0.5 text-xs font-semibold capitalize">${UI.esc(user.role || '')}</span>
             </div>
+            <a href="dashboard.html" data-user-only role="menuitem" class="hidden block px-4 py-2 text-slate-800 hover:bg-slate-50 focus:bg-slate-100 focus:outline-none">My dashboard</a>
             <a href="profile.html" role="menuitem" class="block px-4 py-2 text-slate-800 hover:bg-slate-50 focus:bg-slate-100 focus:outline-none">My profile</a>
             <a href="my-registrations.html" role="menuitem" class="block px-4 py-2 text-slate-800 hover:bg-slate-50 focus:bg-slate-100 focus:outline-none">My registrations</a>
             <a href="notifications.html" role="menuitem" class="block px-4 py-2 text-slate-800 hover:bg-slate-50 focus:bg-slate-100 focus:outline-none">Notifications</a>
