@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sign up · CivicEvents</title>
+  <title>Log in · CivicEvents</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+  <script>Auth.redirectIfLoggedIn();</script>
+  <main id="main" class="flex min-h-screen items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <div class="mb-6 text-center">
+        <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-700 text-lg font-extrabold text-white" aria-hidden="true">CE</span>
+        <h1 class="mt-3 text-2xl font-bold">Create your account</h1>
+        <p class="text-slate-600">Join to register for city events and get updates.</p>
+      </div>
+
+      <form id="signup-form" class="space-y-5 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8" novalidate>
+        <div>
+          <label for="full_name" class="block font-medium">Full name</label>
+          <input id="full_name" type="text" autocomplete="name" required
+            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        </div>
+        <div>
+          <label for="email" class="block font-medium">Email</label>
+          <input id="email" type="email" autocomplete="email" required
+            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        </div>
+        <div>
+          <label for="password" class="block font-medium">Password</label>
+          <input id="password" type="password" autocomplete="new-password" required aria-describedby="pw-rules"
+            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <!-- Password strength meter -->
+          <div class="mt-2 flex gap-1" aria-hidden="true">
+            <span class="pw-bar h-1.5 flex-1 rounded bg-slate-200"></span>
+            <span class="pw-bar h-1.5 flex-1 rounded bg-slate-200"></span>
+            <span class="pw-bar h-1.5 flex-1 rounded bg-slate-200"></span>
+            <span class="pw-bar h-1.5 flex-1 rounded bg-slate-200"></span>
+            <span class="pw-bar h-1.5 flex-1 rounded bg-slate-200"></span>
+          </div>
+          <p class="mt-1 text-sm font-medium" id="pw-label" aria-live="polite">Password strength: –</p>
+          <ul id="pw-rules" class="mt-2 grid grid-cols-1 gap-1 text-sm sm:grid-cols-2">
+            <li data-rule="length" class="text-slate-600">○ At least 8 characters</li>
+            <li data-rule="upper" class="text-slate-600">○ An uppercase letter</li>
+            <li data-rule="lower" class="text-slate-600">○ A lowercase letter</li>
+            <li data-rule="number" class="text-slate-600">○ A number</li>
+            <li data-rule="special" class="text-slate-600">○ A special character</li>
+          </ul>
+        </div>
+        <div>
+          <label for="confirm_password" class="block font-medium">Confirm password</label>
+          <input id="confirm_password" type="password" autocomplete="new-password" required
+            class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        </div>
+        <p id="form-error" class="hidden rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800 ring-1 ring-red-200" role="alert"></p>
+        <button id="submit-btn" type="submit" class="w-full rounded-lg bg-blue-700 py-2.5 font-semibold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-70">Create account</button>
+        <p class="text-center text-sm text-slate-600">Already have an account? <a href="login.html" class="font-medium text-blue-700 underline hover:text-blue-900">Log in</a></p>
+      </form>
+    </div>
+  </main>
+
+<script>
+$(function () {
+  const RULES = {
+    length: p => p.length >= 8,
+    upper: p => /[A-Z]/.test(p),
+    lower: p => /[a-z]/.test(p),
+    number: p => /\d/.test(p),
+    special: p => /[\W_]/.test(p),
+  };
+  const LEVELS = [
+    { label: 'Very weak', color: 'bg-red-600' },
+    { label: 'Weak', color: 'bg-red-600' },
+    { label: 'Fair', color: 'bg-amber-500' },
+    { label: 'Good', color: 'bg-amber-500' },
+    { label: 'Strong', color: 'bg-lime-600' },
+    { label: 'Very strong', color: 'bg-emerald-600' },
+  ];
+
+  function checkPassword(p) {
+    let score = 0;
+    Object.entries(RULES).forEach(([name, test]) => {
+      const pass = test(p);
+      if (pass) score++;
+      $(`#pw-rules [data-rule=${name}]`)
+        .toggleClass('text-emerald-700', pass).toggleClass('text-slate-600', !pass)
+        .text((pass ? '✓ ' : '○ ') + $(`#pw-rules [data-rule=${name}]`).text().slice(2));
+    });
+    const level = p ? LEVELS[score] : null;
+    $('.pw-bar').each(function (i) {
+      $(this).attr('class', 'pw-bar h-1.5 flex-1 rounded ' + (level && i < score ? level.color : 'bg-slate-200'));
+    });
+    $('#pw-label').text('Password strength: ' + (level ? level.label : '–'));
+    return score === 5;
+  }
+
+  $('#password').on('input', function () { checkPassword(this.value); });
+
+  $('#signup-form').on('submit', function (e) {
+    e.preventDefault();
+    $('#form-error').addClass('hidden');
+    const full_name = $('#full_name').val().trim();
+    const email = $('#email').val().trim();
+    const password = $('#password').val();
+    const confirm = $('#confirm_password').val();
+
+    const errors = {
+      '#full_name': full_name.length >= 2 ? '' : 'Enter your full name.',
+      '#email': /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? '' : 'Enter a valid email address.',
+      '#password': checkPassword(password) ? '' : 'Password does not meet all the rules below.',
+      '#confirm_password': confirm && confirm === password ? '' : 'Passwords do not match.',
+    };
+    Object.entries(errors).forEach(([sel, msg]) => UI.fieldError(sel, msg));
+    if (Object.values(errors).some(Boolean)) { $('[aria-invalid=true]').first().trigger('focus'); return; }
+
+    UI.setLoading('#submit-btn', true, 'Creating account…');
+    // NOTE: role is never sent – every self-signup is a normal "user".
+    API.post('/api/auth/signup', { full_name, email, password }, { silent: true })
+      .done(() => {
+        UI.flash('Account created! Please log in.');
+        window.location.href = 'login.html';
+      })
+      .fail(xhr => {
+        const msg = xhr.status === 409 ? 'An account with this email already exists. Try logging in instead.' : xhr.friendlyMessage;
+        $('#form-error').text(msg).removeClass('hidden');
+        UI.setLoading('#submit-btn', false);
+      });
+  });
+});
+</script>
+</body>
+</html>

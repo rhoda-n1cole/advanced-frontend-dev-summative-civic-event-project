@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Access denied · CivicEvents</title>
+  <title>Log in · CivicEvents</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="">
+  <script>Auth.requireLogin();</script>
+  <main id="main" class="mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center px-4 py-16 text-center">
+    <p class="text-6xl" aria-hidden="true">🔒</p>
+    <h1 class="mt-4 text-3xl font-bold">You don't have access to this page</h1>
+    <p class="mt-2 text-slate-700">This area is for administrators only. If you think you should have access, please contact an administrator.</p>
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      <a href="events.html" class="rounded-lg bg-blue-700 px-5 py-2.5 font-semibold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">Go to events</a>
+      <a href="mailto:help@civicevents.city?subject=Access%20request" class="rounded-lg px-5 py-2.5 font-semibold text-blue-700 ring-1 ring-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600">Contact an admin</a>
+    </div>
+  </main>
+  <script>$(Layout.init);</script>
+</body>
+</html>

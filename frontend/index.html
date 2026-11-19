@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CivicEvents</title>
+  <script src="js/auth.js"></script>
+  <script>
+    // Entry point: send people to the right place based on login + role
+    window.location.replace(Auth.getToken() && !Auth.isExpired() ? Auth.homePage() : 'login.html');
+  </script>
+</head>
+<body><noscript>CivicEvents needs JavaScript enabled.</noscript></body>
+</html>
