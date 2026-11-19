@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Users · CivicEvents admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="users">
+  <script>Auth.requireAdmin(); // ROLE GUARD: ADMIN ONLY</script>
+  <div class="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-8 lg:flex-row">
+    <div id="sidebar"></div>
+    <main id="main" class="min-w-0 flex-1">
+      <h1 class="text-3xl font-bold">Users</h1>
+      <p class="mt-1 text-slate-600">Enable or disable accounts. Roles can't be changed from the interface.</p>
+
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+        <div class="flex-1">
+          <label for="search" class="sr-only">Search users</label>
+          <input id="search" type="search" placeholder="Search by name or email…" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        </div>
+        <label class="sr-only" for="f-role">Role</label>
+        <select id="f-role" class="rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="">All roles</option><option value="admin">Admins</option><option value="user">Users</option>
+        </select>
+        <label class="sr-only" for="f-status">Status</label>
+        <select id="f-status" class="rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="">All statuses</option><option value="active">Active</option><option value="disabled">Disabled</option>
+        </select>
+      </div>
+
+      <div class="mt-4 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[640px] text-left text-sm">
+            <caption class="sr-only">All users</caption>
+            <thead class="bg-slate-50 text-slate-600">
+              <tr>
+                <th scope="col" class="px-4 py-3 font-semibold">Name</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Role</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Joined</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Active</th>
+                <th scope="col" class="px-4 py-3 font-semibold"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="rows" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+      <p id="count" class="mt-3 text-sm text-slate-600" aria-live="polite"></p>
+    </main>
+  </div>
+
+  <!-- User profile dialog -->
+  <div id="user-modal" class="fixed inset-0 z-[80] hidden items-center justify-center bg-slate-900/60 p-4" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <div class="flex items-start justify-between">
+        <h2 id="user-modal-title" class="text-xl font-bold">User profile</h2>
+        <button type="button" class="close-modal rounded-lg p-1 text-slate-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600" aria-label="Close">✕</button>
+      </div>
+      <div id="user-modal-body" class="mt-4"></div>
+    </div>
+  </div>
+  <script src="js/pages/admin-users.js"></script>
+</body>
+</html>

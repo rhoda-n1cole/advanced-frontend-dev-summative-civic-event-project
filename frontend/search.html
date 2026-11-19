@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Search · CivicEvents</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/media-api.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="search">
+  <script>Auth.requireLogin(); // ROLE GUARD: any logged-in user</script>
+  <main id="main" class="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+    <h1 class="text-3xl font-bold">Search</h1>
+    <form id="search-form" class="mt-4 flex gap-2" role="search">
+      <label for="q" class="sr-only">Search events, announcements and promos</label>
+      <input id="q" type="search" placeholder="Search events, announcements and promos…" class="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+      <button type="submit" class="rounded-lg bg-blue-700 px-5 font-semibold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">Search</button>
+    </form>
+    <p id="summary" class="mt-4 text-slate-600" aria-live="polite"></p>
+    <div id="results" class="mt-4 space-y-8"></div>
+  </main>
+  <script src="js/pages/search.js"></script>
+</body>
+</html>

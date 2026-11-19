@@ -74,8 +74,17 @@ $(function () {
       .done(res => {
         const { token, user } = res.data;
         Auth.save(token, user, $('#remember').is(':checked'));
-        UI.flash('Welcome back, ' + (user.full_name || '') + '!');
-        window.location.href = Auth.homePage();
+        // The API lets disabled accounts log in, so check is_active and stop them here
+        API.get('/api/users/profile/me', { silent: true }).done(p => {
+          if (p.data && p.data.is_active === false) {
+            Auth.clear();
+            $('#form-error').text('Your account has been disabled. Please contact an administrator.').removeClass('hidden');
+            UI.setLoading('#submit-btn', false);
+            return;
+          }
+          UI.flash('Welcome back, ' + (user.full_name || '') + '!');
+          window.location.href = Auth.homePage();
+        }).fail(() => { UI.flash('Welcome back, ' + (user.full_name || '') + '!'); window.location.href = Auth.homePage(); });
       })
       .fail(xhr => {
         $('#form-error').text(xhr.status === 401 ? 'Incorrect email or password.' : xhr.friendlyMessage).removeClass('hidden');

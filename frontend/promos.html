@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Promos · CivicEvents</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/media-api.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="promos">
+  <script>Auth.requireLogin(); // ROLE GUARD: any logged-in user</script>
+  <main id="main" class="mx-auto w-full max-w-7xl flex-1 px-4 py-8">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold">Promos</h1>
+        <p class="mt-1 text-slate-600">Short videos about city programmes and services, with captions.</p>
+      </div>
+      <!-- ROLE GUARD (UI): admin only -->
+      <a href="promo-form.html" data-admin-only class="hidden rounded-lg bg-blue-700 px-4 py-2.5 font-semibold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">+ New promo</a>
+    </div>
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <div class="flex-1">
+        <label for="search" class="sr-only">Search promos</label>
+        <input id="search" type="search" placeholder="Search promos…" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+      </div>
+      <div data-admin-only class="hidden">
+        <label for="status" class="sr-only">Status</label>
+        <select id="status" class="rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="">All statuses</option><option value="published">Published</option><option value="draft">Unpublished</option>
+        </select>
+      </div>
+      <button id="refresh" type="button" class="rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-600" aria-label="Refresh promos">⟳ Refresh</button>
+    </div>
+    <div id="grid" class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite"></div>
+  </main>
+  <script src="js/pages/promos.js"></script>
+</body>
+</html>

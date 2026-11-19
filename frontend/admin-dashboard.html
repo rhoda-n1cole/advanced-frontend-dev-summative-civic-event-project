@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <title>Admin dashboard · CivicEvents</title>
-  <title>Log in · CivicEvents</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,13 +11,46 @@
   <script src="js/ui.js"></script>
   <script src="js/api.js"></script>
   <script src="js/layout.js"></script>
+  <script src="js/charts.js"></script>
 </head>
 <body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="dashboard">
-  <script>Auth.requireAdmin(); // ROLE GUARD for this page</script>
-  <main id="main" class="mx-auto w-full max-w-7xl flex-1 px-4 py-8">
-    <h1 class="text-3xl font-bold">Admin dashboard</h1>
-    <p class="mt-2 text-slate-600">Coming in the next step.</p>
-  </main>
-  <script>$(Layout.init);</script>
+  <script>Auth.requireAdmin(); // ROLE GUARD: ADMIN ONLY – normal users are redirected to forbidden.html</script>
+  <div class="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-8 lg:flex-row">
+    <div id="sidebar"></div>
+    <main id="main" class="min-w-0 flex-1">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 class="text-3xl font-bold">Dashboard</h1>
+          <p class="mt-1 text-slate-600">Overview of CivicEvents activity. <span id="updated" class="text-sm"></span></p>
+        </div>
+        <button id="refresh" type="button" class="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-600">⟳ Refresh</button>
+      </div>
+
+      <section aria-label="Key numbers" id="stats" class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4"></section>
+
+      <div class="mt-6 grid gap-6 xl:grid-cols-2">
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200" aria-labelledby="c1">
+          <h2 id="c1" class="text-lg font-bold">Content &amp; engagement</h2>
+          <div id="chart-content" class="mt-4"></div>
+        </section>
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200" aria-labelledby="c2">
+          <h2 id="c2" class="text-lg font-bold">New users (last 6 months)</h2>
+          <div id="chart-growth" class="mt-4"></div>
+        </section>
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200" aria-labelledby="c3">
+          <h2 id="c3" class="text-lg font-bold">Accounts</h2>
+          <div id="chart-users" class="mt-4"></div>
+        </section>
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200" aria-labelledby="c4">
+          <div class="flex items-center justify-between">
+            <h2 id="c4" class="text-lg font-bold">Next events</h2>
+            <a href="events.html" class="text-sm font-semibold text-blue-700 hover:underline">All events →</a>
+          </div>
+          <ul id="next-events" class="mt-4 divide-y divide-slate-100"></ul>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="js/pages/admin-dashboard.js"></script>
 </body>
 </html>

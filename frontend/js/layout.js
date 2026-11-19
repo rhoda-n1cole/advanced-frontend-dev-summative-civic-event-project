@@ -175,7 +175,7 @@ const Layout = {
     $('#global-search, .mobile-search').on('submit', function (e) {
       e.preventDefault();
       const q = $(this).find('input').val().trim();
-      window.location.href = 'events.html' + (q ? '?q=' + encodeURIComponent(q) : '');
+      window.location.href = 'search.html' + (q ? '?q=' + encodeURIComponent(q) : '');
     });
 
     // Mobile menu
@@ -210,6 +210,30 @@ const Layout = {
       Notifs.markRead($(this).data('id')); // optimistic: mark read immediately
       Layout.renderNotifications();
     });
+  },
+
+  /**
+   * Admin sidebar (left on desktop, horizontal scroll bar on mobile).
+   * Only rendered on pages that already passed Auth.requireAdmin().
+   */
+  adminSidebar(current) {
+    const item = (href, icon, label, key) => `
+      <a href="${href}" ${key === current ? 'aria-current="page"' : ''}
+        class="flex flex-none items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 ${key === current ? 'bg-blue-700 text-white' : 'text-slate-700 hover:bg-slate-100'}">
+        <span aria-hidden="true">${icon}</span>${label}</a>`;
+    return `
+      <aside class="lg:w-60 lg:flex-none" aria-label="Admin navigation">
+        <nav class="flex gap-1 overflow-x-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-slate-200 lg:sticky lg:top-24 lg:flex-col">
+          <p class="hidden px-3 pb-1 pt-2 text-xs font-bold uppercase tracking-wide text-slate-500 lg:block">Admin</p>
+          ${item('admin-dashboard.html', '📊', 'Dashboard', 'dashboard')}
+          ${item('admin-users.html', '👥', 'Users', 'users')}
+          ${item('admin-notifications.html', '🔔', 'Notifications', 'admin-notifications')}
+          <p class="hidden px-3 pb-1 pt-4 text-xs font-bold uppercase tracking-wide text-slate-500 lg:block">Create</p>
+          ${item('event-form.html', '📅', 'New event', 'new-event')}
+          ${item('announcement-form.html', '📢', 'New announcement', 'new-announcement')}
+          ${item('promo-form.html', '🎬', 'New promo', 'new-promo')}
+        </nav>
+      </aside>`;
   },
 
   openDrawer() {

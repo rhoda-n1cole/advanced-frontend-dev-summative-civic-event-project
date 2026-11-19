@@ -91,9 +91,10 @@ $(function () {
     $('#result-count').text(`${list.length} event${list.length === 1 ? '' : 's'} found`);
 
     if (!list.length) {
+      const anyVisible = state.events.some(e => Auth.isAdmin() || e.published !== false);
       $('#events-grid').html(UI.emptyState(
-        state.events.length ? 'No events match your filters' : 'No events yet',
-        state.events.length ? 'Try a different search, date or location.' : 'Check back soon for new city events.',
+        anyVisible ? 'No events match your filters' : 'No events yet',
+        anyVisible ? 'Try a different search, date or location.' : 'Check back soon for new city events.',
         Auth.isAdmin() && !state.events.length ? '<a href="event-form.html" class="rounded-lg bg-blue-700 px-4 py-2 font-semibold text-white hover:bg-blue-800">Create the first event</a>' : ''
       ));
       $('#pagination').empty();

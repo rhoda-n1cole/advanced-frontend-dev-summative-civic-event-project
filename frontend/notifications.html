@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Notifications · CivicEvents</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="notifications">
+  <script>Auth.requireLogin(); // ROLE GUARD: any logged-in user (sees broadcast + their own)</script>
+  <main id="main" class="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h1 class="text-3xl font-bold">Notifications</h1>
+        <p class="mt-1 text-slate-600">Updates about new events, announcements and promos.</p>
+      </div>
+      <button id="mark-all" type="button" class="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-blue-700 ring-1 ring-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600">Mark all as read</button>
+    </div>
+
+    <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filter notifications">
+      <label class="sr-only" for="f-type">Type</label>
+      <select id="f-type" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        <option value="">All types</option><option value="event">Events</option><option value="announcement">Announcements</option><option value="promo">Promos</option><option value="system">System</option>
+      </select>
+      <label class="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm ring-1 ring-slate-300">
+        <input id="f-unread" type="checkbox" class="h-4 w-4 rounded border-slate-400 text-blue-700 focus:ring-blue-600"> Unread only
+      </label>
+    </div>
+
+    <div class="mt-4 grid gap-6 lg:grid-cols-5">
+      <ul id="list" class="space-y-2 lg:col-span-2" aria-label="Notification list"></ul>
+      <section id="detail" class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-3 lg:sticky lg:top-24 lg:self-start" aria-live="polite" aria-label="Notification detail">
+        <p class="text-slate-600">Select a notification to read it.</p>
+      </section>
+    </div>
+  </main>
+  <script src="js/pages/notifications.js"></script>
+</body>
+</html>

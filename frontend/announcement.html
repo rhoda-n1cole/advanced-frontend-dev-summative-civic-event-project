@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Announcement · CivicEvents</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/media-api.js"></script>
+  <script src="js/audio-player.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="announcements">
+  <script>Auth.requireLogin(); // ROLE GUARD: any logged-in user</script>
+  <main id="main" class="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
+    <a href="announcements.html" class="inline-flex items-center gap-1 rounded text-sm font-medium text-blue-700 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-600">← All announcements</a>
+    <div id="content" class="mt-4" aria-live="polite">
+      <div class="animate-pulse space-y-4" aria-hidden="true"><div class="h-8 w-2/3 rounded bg-slate-200"></div><div class="h-40 rounded-2xl bg-slate-200"></div></div>
+    </div>
+  </main>
+  <script src="js/pages/announcement.js"></script>
+</body>
+</html>

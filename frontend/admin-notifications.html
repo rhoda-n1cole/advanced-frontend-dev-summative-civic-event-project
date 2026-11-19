@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Manage notifications · CivicEvents admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="admin-notifications">
+  <script>Auth.requireAdmin(); // ROLE GUARD: ADMIN ONLY</script>
+  <div class="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-8 lg:flex-row">
+    <div id="sidebar"></div>
+    <main id="main" class="min-w-0 flex-1">
+      <h1 class="text-3xl font-bold">Manage notifications</h1>
+      <p class="mt-1 text-slate-600">Remove outdated or mistaken notifications for everyone.</p>
+
+      <div class="mt-6 rounded-2xl bg-blue-50 p-5 text-blue-900 ring-1 ring-blue-200">
+        <p class="font-semibold">📣 How broadcast notifications are sent</p>
+        <p class="mt-1 text-sm">Every resident is notified automatically when you create an event, create an announcement, upload a promo, or publish an announcement or promo. The provided API has no endpoint for writing a custom notification.</p>
+      </div>
+
+      <form id="delete-form" class="mt-6 flex flex-col gap-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:flex-row sm:items-end" novalidate>
+        <div class="flex-1">
+          <label for="notif-id" class="block font-medium">Delete a notification by ID</label>
+          <input id="notif-id" type="text" placeholder="e.g. 3f1c…" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 font-mono text-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        </div>
+        <button id="delete-id-btn" type="submit" class="rounded-lg bg-red-700 px-4 py-2.5 font-semibold text-white hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2">Delete</button>
+      </form>
+
+      <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex gap-2">
+          <label class="sr-only" for="search">Search</label>
+          <input id="search" type="search" placeholder="Search notifications…" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <label class="sr-only" for="f-type">Type</label>
+          <select id="f-type" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <option value="">All types</option><option value="event">Events</option><option value="announcement">Announcements</option><option value="promo">Promos</option><option value="system">System</option>
+          </select>
+        </div>
+        <button id="bulk-delete" type="button" disabled class="rounded-lg px-4 py-2 text-sm font-semibold text-red-700 ring-1 ring-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50">Delete selected (<span id="sel-count">0</span>)</button>
+      </div>
+
+      <div class="mt-3 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[640px] text-left text-sm">
+            <caption class="sr-only">All notifications</caption>
+            <thead class="bg-slate-50 text-slate-600">
+              <tr>
+                <th scope="col" class="w-10 px-4 py-3"><input id="select-all" type="checkbox" class="h-4 w-4 rounded border-slate-400 text-blue-700 focus:ring-blue-600" aria-label="Select all"></th>
+                <th scope="col" class="px-4 py-3 font-semibold">Notification</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Type</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Audience</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Sent</th>
+                <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="rows" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="js/pages/admin-notifications.js"></script>
+</body>
+</html>

@@ -133,7 +133,7 @@ const UI = {
     if (!file) return '';
     const rule = CONFIG.UPLOADS[kind];
     const ext = file.name.split('.').pop().toLowerCase();
-    if (!rule.ext.includes(ext)) return `Please choose a ${rule.ext.join(', ')} file.`;
+    if (!rule.ext.includes(ext)) return `That file type isn't allowed. Please choose: ${rule.ext.map(e => e.toUpperCase()).join(', ')}.`;
     if (file.size > rule.maxMB * 1024 * 1024) return `File is too large (max ${rule.maxMB} MB).`;
     return '';
   },

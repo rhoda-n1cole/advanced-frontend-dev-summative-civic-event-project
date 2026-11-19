@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Announcements · CivicEvents</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/media-api.js"></script>
+  <script src="js/audio-player.js"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-100 text-slate-900" data-page="announcements">
+  <script>Auth.requireLogin(); // ROLE GUARD: any logged-in user can listen</script>
+  <main id="main" class="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold">Announcements</h1>
+        <p class="mt-1 text-slate-600">Audio updates from the city. Press play to listen.</p>
+      </div>
+      <!-- ROLE GUARD (UI): admin only -->
+      <a href="announcement-form.html" data-admin-only class="hidden rounded-lg bg-blue-700 px-4 py-2.5 font-semibold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">+ New announcement</a>
+    </div>
+
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <div class="flex-1">
+        <label for="search" class="sr-only">Search announcements</label>
+        <input id="search" type="search" placeholder="Search announcements…" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+      </div>
+      <div data-admin-only class="hidden">
+        <label for="status" class="sr-only">Status</label>
+        <select id="status" class="rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="">All statuses</option><option value="published">Published</option><option value="draft">Unpublished</option>
+        </select>
+      </div>
+    </div>
+
+    <ul id="list" class="mt-4 space-y-3" aria-live="polite"></ul>
+    <nav id="pagination" class="mt-6 flex justify-center gap-2" aria-label="Pagination"></nav>
+  </main>
+  <script src="js/pages/announcements.js"></script>
+</body>
+</html>
