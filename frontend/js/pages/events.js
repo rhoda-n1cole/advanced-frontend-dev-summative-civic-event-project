@@ -102,6 +102,10 @@ $(function () {
     }
 
     $('#events-grid').html(slice.map(card).join(''));
+    // If an image fails to load, swap in the gradient placeholder
+    $('#events-grid .event-img').on('error', function () {
+      $(this).replaceWith('<div class="flex h-44 items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 text-5xl" aria-hidden="true">📅</div>');
+    });
     Auth.applyRoleVisibility('#events-grid');
     renderPagination(pages);
   }
@@ -115,7 +119,7 @@ $(function () {
       <article class="flex flex-col overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md">
         <a href="event.html?id=${encodeURIComponent(e.id)}" class="block focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600" tabindex="-1" aria-hidden="true">
           ${img
-            ? `<img src="${UI.esc(img)}" alt="" loading="lazy" class="h-44 w-full object-cover bg-slate-200" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'h-44 bg-gradient-to-br from-blue-600 to-indigo-700'}))">`
+            ? `<img src="${UI.esc(img)}" alt="" loading="lazy" class="event-img h-44 w-full object-cover bg-slate-200">`
             : '<div class="flex h-44 items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 text-5xl" aria-hidden="true">📅</div>'}
         </a>
         <div class="flex flex-1 flex-col p-5">

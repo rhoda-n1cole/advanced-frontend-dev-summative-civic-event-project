@@ -94,11 +94,13 @@ const UI = {
   },
 
   /**
-   * Accessible confirm dialog. Returns a promise that resolves true/false.
+   * Accessible confirm dialog. Returns a jQuery promise that resolves true/false.
    * Usage: UI.confirm('Delete this event?').then(ok => { if (ok) ... })
    */
   confirm(message, { confirmText = 'Confirm', danger = true } = {}) {
-    return new Promise(resolve => {
+    const deferred = $.Deferred();
+    const resolve = v => deferred.resolve(v);
+    {
       const lastFocus = document.activeElement;
       const $m = $(`
         <div class="fixed inset-0 z-[90] flex items-center justify-center bg-slate-900/60 p-4" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
@@ -125,7 +127,8 @@ const UI = {
       });
       $('body').append($m);
       $m.find('[data-no]').trigger('focus');
-    });
+    }
+    return deferred.promise();
   },
 
   /** Validate a chosen file against CONFIG.UPLOADS[kind]. Returns an error string or ''. */

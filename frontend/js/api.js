@@ -33,10 +33,14 @@ const API = {
       settings.contentType = false;
       if (opts.onProgress) {
         settings.xhr = function () {
-          const xhr = new window.XMLHttpRequest();
-          xhr.upload.addEventListener('progress', e => {
-            if (e.lengthComputable) opts.onProgress(Math.round((e.loaded / e.total) * 100));
-          });
+          // jQuery's default XHR, with an upload-progress listener added
+          const xhr = $.ajaxSettings.xhr();
+          if (xhr.upload) {
+            $(xhr.upload).on('progress', e => {
+              const ev = e.originalEvent;
+              if (ev.lengthComputable) opts.onProgress(Math.round((ev.loaded / ev.total) * 100));
+            });
+          }
           return xhr;
         };
       }

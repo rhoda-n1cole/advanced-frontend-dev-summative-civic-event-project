@@ -59,25 +59,25 @@ $(function () {
       </article>`);
     Auth.applyRoleVisibility('#content');
 
-    const video = document.getElementById('video');
-    $(video).on('error', () => $('#video-error').removeClass('hidden'));
-    $(video).find('source').on('error', () => $('#video-error').removeClass('hidden'));
+    const $video = $('#video');
+    const video = $video[0]; // native element, needed for the media API (duration, textTracks)
+    $video.on('error', () => $('#video-error').removeClass('hidden'));
+    $video.find('source').on('error', () => $('#video-error').removeClass('hidden'));
 
     // Build the captions track once we know the video length
     const addTrack = () => {
-      if (!p.caption_text || video.querySelector('track')) return;
-      const track = document.createElement('track');
-      Object.assign(track, { kind: 'captions', srclang: 'en', label: 'English', default: true, src: Promos.captionsUrl(p.caption_text, video.duration) });
-      video.appendChild(track);
-      track.track.mode = 'showing'; // captions ON by default
+      if (!p.caption_text || $video.find('track').length) return;
+      const $track = $('<track>', { kind: 'captions', srclang: 'en', label: 'English', default: true, src: Promos.captionsUrl(p.caption_text, video.duration) });
+      $video.append($track);
+      $track[0].track.mode = 'showing'; // captions ON by default
     };
-    if (video.readyState >= 1) addTrack(); else $(video).one('loadedmetadata', addTrack);
+    if (video.readyState >= 1) addTrack(); else $video.one('loadedmetadata', addTrack);
     // If metadata never loads (e.g. slow network), still add captions after 3s
     setTimeout(addTrack, 3000);
   }
 
   $('#content').on('click', '#cc-btn', function () {
-    const t = document.querySelector('#video').textTracks[0];
+    const t = $('#video')[0].textTracks[0];
     if (!t) return;
     const on = t.mode !== 'showing';
     t.mode = on ? 'showing' : 'hidden';

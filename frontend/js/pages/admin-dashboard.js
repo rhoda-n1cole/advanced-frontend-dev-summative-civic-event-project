@@ -10,7 +10,7 @@ $(function () {
 
   load();
   setInterval(() => { if (!document.hidden) load(true); }, 60000);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) load(true); });
+  $(document).on('visibilitychange', () => { if (!document.hidden) load(true); });
   $('#refresh').on('click', () => load());
 
   function load(quiet) {
